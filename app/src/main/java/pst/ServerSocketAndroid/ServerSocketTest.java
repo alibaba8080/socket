@@ -1,15 +1,15 @@
-package pst.test;
+package pst.ServerSocketAndroid;
 
 import java.util.Date;
 
-import pst.server_socket.UsbManager;
-import pst.server_socket.UsbServerSocket;
+import pst.ServerSocketAndroid.UsbManager;
+import pst.ServerSocketAndroid.UsbServerSocket;
 
 public class ServerSocketTest {
     public static void main(String[]args){
         // 开启服务器
         UsbServerSocket.getInstance().start();
-//        UsbServerSocket.getInstance().stopServer();
+//        ServerSocket.getInstance().stopServer();
         new Thread(new Runnable() {
             @Override
             public void run() {

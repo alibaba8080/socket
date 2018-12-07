@@ -26,7 +26,7 @@
         android:id="@+id/start_client3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="启动客户端3"/>
+        android:text="启动聊天"/>
     <EditText
         android:id="@+id/input_msg"
         android:layout_margin="5dp"

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import pst.ServerSocketJava.ServerManager;
 import pst.constant.Constant;
-import pst.server_socket.UsbHandler;
 
 public class CharActivity extends AppCompatActivity {
 
@@ -29,7 +30,10 @@ public class CharActivity extends AppCompatActivity {
     private Socket socket;
     private ArrayList<MyBean> list;
     private MyAdapter adapter;
-    private UsbHandler usbHandler;
+    private Handler handler;
+    private OutputStream outputStream;
+    private InputStream inputStream;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,49 +45,26 @@ public class CharActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         list = new ArrayList<>();
         adapter = new MyAdapter(this);
-        usbHandler= UsbHandler.getInstance();
 
-        final Handler handler = new MyHandler();
-
+        handler = new MyHandler();
+        startChart();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String data = et.getText().toString();
-                if (socket == null) {
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                socket = new Socket(Constant.SOCKET_ADDRESS, 18100);
-                                InputStream inputStream = socket.getInputStream();
-                                byte[] buffer = new byte[1024];
-                                int len;
-                                while ((len = inputStream.read(buffer)) != -1) {
-                                    String data = new String(buffer, 0, len);
-                                    // 发到主线程中 收到的数据
-                                    Message message = Message.obtain();
-                                    message.what = 1;
-                                    message.obj = data;
-                                    handler.sendMessage(message);
-                                }
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                if (outputStream == null) {
+                    Toast.makeText(CharActivity.this, "未连接", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            OutputStream outputStream = socket.getOutputStream();
+
                             SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");    //设置日期格式
-                            outputStream.write((socket.getLocalPort() + "//" + data + "//" + df.format(new Date())).getBytes("utf-8"));
+                            outputStream.write((socket.getLocalPort() + "//" + data + "//" + df.format(new Date()) + "\n").getBytes("utf-8"));
                             outputStream.flush();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -120,6 +101,50 @@ public class CharActivity extends AppCompatActivity {
                 LinearLayoutManager manager = new LinearLayoutManager(CharActivity.this, LinearLayoutManager.VERTICAL, false);
                 rv.setLayoutManager(manager);
             }
+        }
+    }
+
+    private void startChart() {
+        if (socket == null) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+
+                        try {
+                            socket = new Socket(Constant.SOCKET_ADDRESS, 18100);
+                            outputStream = socket.getOutputStream();
+                            inputStream = socket.getInputStream();
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            String msg = "";
+                            while ((len = inputStream.read(buffer)) != -1) {
+                                String input = new String(buffer, 0, len);
+                                msg += input;
+                                if (msg.endsWith("\n")) {
+                                    String data = new String(buffer, 0, len);
+                                    Message message = Message.obtain();
+                                    message.what = 1;
+                                    message.obj = data;
+                                    handler.sendMessage(message);
+                                    msg = "";
+                                }
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                }
+
+            }).start();
+            return;
         }
     }
 }

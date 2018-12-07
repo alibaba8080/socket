@@ -1,4 +1,4 @@
-package pst.server_socket;
+package pst.ServerSocketAndroid;
 
 
 import android.os.Handler;
@@ -35,24 +35,20 @@ UsbHandler extends Handler {
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
         String msgInfo = (String) msg.obj;
-
+        toast(msgInfo);
+        printLog(msgInfo);
         switch (msg.what) {
             case STATUS_CONNECT_SUCCESS:
-                printLog(msgInfo);
-                toast(msgInfo);
                 if (null != listener) {
                     listener.onConnect(msgInfo);
                 }
                 break;
             case ACTION_CONNECT_CLOSED:
-                printLog(msgInfo);
                 if (null != listener) {
                     listener.onDisconnect(msgInfo);
                 }
                 break;
             case STATUS_CONNECT_ERROR:
-                printLog(msgInfo);
-                toast(msgInfo);
                 if (null != listener) {
                     listener.onError(msgInfo);
                 }
@@ -73,11 +69,9 @@ UsbHandler extends Handler {
                 }
                 break;
             case STATUS_SERVER_SUCCESS:
-                printLog(msgInfo);
 //                showMsg(msgInfo);
                 break;
             case STATUS_SERVER_CLOSED:
-                printLog(msgInfo);
 //                showMsg(msgInfo);
                 break;
         }

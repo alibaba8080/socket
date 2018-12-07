@@ -1,15 +1,17 @@
-package pst.server_socket;
+package pst.ServerSocketJava;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import pst.ServerSocketAndroid.UsbHandler;
 
 
 /**
  * Create By：Pst on 2018/11/1 0001 14:21
  * DescriBe:连接的客户端
  */
-public class UsbClient extends Thread {
+public class ServerClient extends Thread implements ServerManager.OnClickListener {
     private Socket socket;
     private final String address;
     private volatile boolean flag = true;
@@ -17,18 +19,9 @@ public class UsbClient extends Thread {
     private InputStream inputStream;
     private int MSG_MODE = UsbHandler.STATUS_CONNECT_ERROR;
 
-    public UsbClient(Socket socket) {
+    public ServerClient(Socket socket) {
         this.socket = socket;
         address = socket.getInetAddress().toString();
-        UsbHandler.getInstance().sendMsg("连接成功，连接的手机为：" + address, UsbHandler.STATUS_CONNECT_SUCCESS);
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 
     @Override
@@ -38,7 +31,7 @@ public class UsbClient extends Thread {
             // 单线程索锁
             synchronized (this) {
                 // 放进到Map中保存
-                USBanager.getManager().add(UsbClient.this);
+                ServerManager.getManager().setOnClicklistener(address,this);
             }
             // 定义输入流
             inputStream = socket.getInputStream();
@@ -49,8 +42,8 @@ public class UsbClient extends Thread {
                 String input = new String(buffer, 0, len);
                 msg += input;
                 if (msg.endsWith("\n")) {
-                    UsbHandler.getInstance().sendMsg(msg + "", MSG_MODE);
-                    msg = "";
+                    ServerManager.getManager().publish(msg);
+                    msg="";
                 }
 
             }
@@ -58,29 +51,27 @@ public class UsbClient extends Thread {
             System.out.println("错误信息为：" + e.getMessage());
         } finally {
             synchronized (this) {
-                UsbHandler.getInstance().sendMsg("关闭链接：" + address, UsbHandler.ACTION_CONNECT_CLOSED);
-                USBanager.getManager().remove(address);
-                cloes();
+                ServerManager.getManager().remove(address);
             }
         }
     }
 
-    public boolean sendMsg(String msg, int type) {
-        MSG_MODE = type;
+    @Override
+    public void onSend(String msg) {
         try {
             if (printWriter == null) {
                 printWriter = new PrintWriter(socket.getOutputStream(), true);
             }
             printWriter.println(msg);
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
-    public boolean cloes() {
+    @Override
+    public void onClosed() {
         try {
+            flag=false;
             if (inputStream != null) {
                 inputStream.close();
             }
@@ -97,6 +88,5 @@ public class UsbClient extends Thread {
             inputStream = null;
             socket = null;
         }
-        return true;
     }
 }

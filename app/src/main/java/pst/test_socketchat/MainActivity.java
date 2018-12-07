@@ -1,6 +1,7 @@
 package pst.test_socketchat;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +17,8 @@ import java.io.InputStream;
 import java.net.Socket;
 
 import pst.constant.Constant;
-import pst.server_socket.UsbHandler;
-import pst.server_socket.UsbServerSocket;
+import pst.ServerSocketAndroid.UsbHandler;
+import pst.ServerSocketAndroid.UsbServerSocket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, UsbListener {
 
@@ -82,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setStartClient();
                 break;
             case R.id.start_client3:
-                setStartClient();
+                Intent intent=new Intent(this,CharActivity.class);
+                startActivity(intent);
                 break;
             case R.id.send_msg:
 

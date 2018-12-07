@@ -5,6 +5,7 @@ package pst.constant;
  * DescriBe:
  */
 public class Constant {
-    public static final String SOCKET_ADDRESS="127.0.0.1";//192.168.43.198
+//    public static final String SOCKET_ADDRESS = "127.0.0.1";//192.168.43.198
 //    public static final String SOCKET_ADDRESS="192.168.43.198";//192.168.43.198
+    public static final String SOCKET_ADDRESS = "192.168.43.128";//192.168.43.128
 }
