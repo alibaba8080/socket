@@ -1,6 +1,9 @@
-package sq.server_socket;
+package pst.test;
 
 import java.util.Date;
+
+import pst.server_socket.UsbManager;
+import pst.server_socket.UsbServerSocket;
 
 public class ServerSocketTest {
     public static void main(String[]args){

@@ -1,4 +1,4 @@
-package sq.server_socket;
+package pst.server_socket;
 
 
 import android.os.Handler;
@@ -6,13 +6,14 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import sq.constant.USBApplication;
+import pst.constant.USBApplication;
 
 /**
  * Create By：Pst on 2018/11/2 0002 10:41
  * DescriBe:消息发送
  */
-public class UsbHandler extends Handler {
+public class
+UsbHandler extends Handler {
     public final static int ACTION_DOWN_PRISONER = 0001;//下载犯人数据
     public final static int ACTION_UPLOAD_DATA  = 0002;//上传消息
     public final static int ACTION_CONNECT_CLOSED = 0003;//关闭连接
@@ -38,8 +39,7 @@ public class UsbHandler extends Handler {
         switch (msg.what) {
             case STATUS_CONNECT_SUCCESS:
                 printLog(msgInfo);
-                toast("连接成功，可进行数据传输！");
-//                PrisonApplication.getSdkVoiceUtil().play("连接成功，可进行数据传输");
+                toast(msgInfo);
                 if (null != listener) {
                     listener.onConnect(msgInfo);
                 }
@@ -52,10 +52,10 @@ public class UsbHandler extends Handler {
                 break;
             case STATUS_CONNECT_ERROR:
                 printLog(msgInfo);
-                toast("启动服务失败");
-//                if (null != listener) {
-//                    listener.onError(msgInfo);
-//                }
+                toast(msgInfo);
+                if (null != listener) {
+                    listener.onError(msgInfo);
+                }
                 break;
             case ACTION_UPLOAD_DATA:
                 if (null != listener) {

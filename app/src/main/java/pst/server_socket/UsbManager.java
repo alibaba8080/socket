@@ -1,4 +1,4 @@
-package sq.server_socket;
+package pst.server_socket;
 
 import java.util.HashMap;
 import java.util.Map;

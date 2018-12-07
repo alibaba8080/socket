@@ -1,4 +1,4 @@
-package sq.test_socketchat;
+package pst.test_socketchat;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

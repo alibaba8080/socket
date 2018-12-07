@@ -1,4 +1,4 @@
-package sq.test_socketchat;
+package pst.test_socketchat;
 
 /**
  * Created by sp01 on 2017/4/28.

@@ -1,7 +1,6 @@
-package sq.test_socketchat;
+package pst.test_socketchat;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,14 +9,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.jx.call.server_socket.UsbListener;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-import sq.constant.Constant;
-import sq.server_socket.UsbHandler;
+import pst.constant.Constant;
+import pst.server_socket.UsbHandler;
+import pst.server_socket.UsbServerSocket;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, UsbListener {
 
     private Button startServer;
     private Button shutServer;
@@ -26,6 +28,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private Button startClient3;
     private EditText inputMsg;
     private Button sendMsg;
+
+    private UsbHandler usbHandler;
 
 
 
@@ -42,8 +46,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_activity);
-       UsbHandler usbHandler= UsbHandler.getInstance();
+        setContentView(R.layout.main_activity);
+        usbHandler = UsbHandler.getInstance();
+        usbHandler.setListener(this);
         startServer = (Button) findViewById(R.id.start_server);
         shutServer = (Button) findViewById(R.id.shut_server);
         startClient1 = (Button) findViewById(R.id.start_client1);
@@ -63,10 +68,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.start_server:
-
+                UsbServerSocket.getInstance().start();
                 break;
             case R.id.shut_server:
-
+                if(!UsbServerSocket.isClose){
+                    UsbServerSocket.getInstance().stopServer();
+                }
                 break;
             case R.id.start_client1:
                 setStartClient();
@@ -107,5 +114,35 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onConnect(String msg) {
+
+    }
+
+    @Override
+    public void onDisconnect(String msg) {
+
+    }
+
+    @Override
+    public void onError(String msg) {
+
+    }
+
+    @Override
+    public void onDownLoad(String msg) {
+
+    }
+
+    @Override
+    public void onDownData(String msg) {
+
+    }
+
+    @Override
+    public void onUpLoad(String msg) {
+
     }
 }

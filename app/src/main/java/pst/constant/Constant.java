@@ -1,4 +1,4 @@
-package sq.constant;
+package pst.constant;
 
 /**
  * Create By：Pst on 2018/11/1 0001 18:35

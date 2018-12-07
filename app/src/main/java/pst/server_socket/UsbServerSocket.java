@@ -1,4 +1,4 @@
-package sq.server_socket;
+package pst.server_socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

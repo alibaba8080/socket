@@ -1,4 +1,5 @@
-package sq.server_socket;
+package pst.server_socket;
+
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -58,7 +59,7 @@ public class UsbClient extends Thread {
         } finally {
             synchronized (this) {
                 UsbHandler.getInstance().sendMsg("关闭链接：" + address, UsbHandler.ACTION_CONNECT_CLOSED);
-              USBanager.getManager().remove(address);
+                USBanager.getManager().remove(address);
                 cloes();
             }
         }

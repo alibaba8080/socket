@@ -1,6 +1,5 @@
-package sq.test_socketchat;
+package pst.test_socketchat;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import sq.constant.Constant;
-import sq.server_socket.UsbHandler;
+import pst.constant.Constant;
+import pst.server_socket.UsbHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class CharActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private EditText et;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.char_layout);
 
         rv = (RecyclerView) findViewById(R.id.rv);
         et = (EditText) findViewById(R.id.et);
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 // 向适配器set数据
                 adapter.setData(list);
                 rv.setAdapter(adapter);
-                LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager manager = new LinearLayoutManager(CharActivity.this, LinearLayoutManager.VERTICAL, false);
                 rv.setLayoutManager(manager);
             }
         }

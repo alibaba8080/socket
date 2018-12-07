@@ -1,4 +1,4 @@
-package sq.constant;
+package pst.constant;
 
 import android.content.Context;
 
